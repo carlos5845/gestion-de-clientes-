@@ -1,6 +1,12 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
+// Función para convertir la fecha "YYYY-MM-DD" a "DD/MM/YYYY"
+const convertirFecha = (fecha) => {
+  const [año, mes, dia] = fecha.split("-");
+  return `${dia}/${mes}/${año}`;
+};
+
 const FormularioCliente = ({ agregarCliente }) => {
   const [nombre, setNombre] = useState("");
   const [fecha, setFecha] = useState("");
@@ -9,7 +15,8 @@ const FormularioCliente = ({ agregarCliente }) => {
   const manejarEnvio = (e) => {
     e.preventDefault();
     if (nombre && fecha && monto) {
-      agregarCliente({ nombre, fecha, monto: parseFloat(monto) });
+      const fechaFormateada = convertirFecha(fecha); // Convertir fecha a "DD/MM/YYYY"
+      agregarCliente({ nombre, fechaCompra: fechaFormateada, monto: parseFloat(monto) });
       setNombre("");
       setFecha("");
       setMonto("");

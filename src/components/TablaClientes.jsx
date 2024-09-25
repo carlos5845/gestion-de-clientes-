@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+
 const TablaClientes = ({ clientes }) => {
   return (
     <table>
@@ -13,7 +14,7 @@ const TablaClientes = ({ clientes }) => {
         {clientes.map((cliente, indice) => (
           <tr key={indice}>
             <td>{cliente.nombre}</td>
-            <td>{cliente.fecha}</td>
+            <td>{cliente.fechaCompra}</td> {/* Cambiado a fechaCompra */}
             <td>{cliente.monto}</td>
           </tr>
         ))}
@@ -21,11 +22,12 @@ const TablaClientes = ({ clientes }) => {
     </table>
   );
 };
+
 TablaClientes.propTypes = {
   clientes: PropTypes.arrayOf(
     PropTypes.shape({
       nombre: PropTypes.string.isRequired,
-      fecha: PropTypes.string.isRequired,
+      fechaCompra: PropTypes.string.isRequired,  // Cambiado a fechaCompra
       monto: PropTypes.number.isRequired,
     })
   ).isRequired,

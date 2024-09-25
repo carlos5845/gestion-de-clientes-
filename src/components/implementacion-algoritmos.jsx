@@ -1,3 +1,9 @@
+// Función para convertir la fecha "DD/MM/YYYY" en un objeto Date
+const convertirFecha = (fechaStr) => {
+  const [dia, mes, año] = fechaStr.split("/").map(Number);
+  return new Date(año, mes - 1, dia); // Mes en JavaScript es 0 indexado
+};
+
 // Heapsort
 export const ordenarPorHeapSort = (array) => {
   const construirHeap = (array) => {
@@ -12,10 +18,20 @@ export const ordenarPorHeapSort = (array) => {
     let mayor = i;
     let izquierda = 2 * i + 1;
     let derecha = 2 * i + 2;
-    if (izquierda < length && array[izquierda].monto > array[mayor].monto) {
+
+    // Comparar fechas de compra
+    if (
+      izquierda < length &&
+      convertirFecha(array[izquierda].fechaCompra) >
+        convertirFecha(array[mayor].fechaCompra)
+    ) {
       mayor = izquierda;
     }
-    if (derecha < length && array[derecha].monto > array[mayor].monto) {
+    if (
+      derecha < length &&
+      convertirFecha(array[derecha].fechaCompra) >
+        convertirFecha(array[mayor].fechaCompra)
+    ) {
       mayor = derecha;
     }
     if (mayor !== i) {
@@ -42,12 +58,15 @@ export const ordenarPorQuickSort = (array) => {
     return array;
   }
 
-  const pivote = array[array.length - 1];
+  const pivote = array[array.length - 1]; // Tomamos el último elemento como pivote
   const izquierda = [];
   const derecha = [];
 
+  // Comparar fechas de compra en lugar de montos
   for (let i = 0; i < array.length - 1; i++) {
-    if (array[i].monto < pivote.monto) {
+    if (
+      convertirFecha(array[i].fechaCompra) < convertirFecha(pivote.fechaCompra)
+    ) {
       izquierda.push(array[i]);
     } else {
       derecha.push(array[i]);
