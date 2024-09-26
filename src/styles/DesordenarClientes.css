@@ -1,0 +1,14 @@
+.boton-desordenar {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #dc3545;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.boton-desordenar:hover {
+  background-color: #c82333;
+}

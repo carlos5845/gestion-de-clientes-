@@ -5,7 +5,7 @@ const convertirFecha = (fechaStr) => {
 };
 
 // Heapsort
-export const ordenarPorHeapSort = (array) => {
+export const ordenarPorHeapSort = (array, criterio) => {
   const construirHeap = (array) => {
     let i = Math.floor(array.length / 2 - 1);
     while (i >= 0) {
@@ -19,21 +19,37 @@ export const ordenarPorHeapSort = (array) => {
     let izquierda = 2 * i + 1;
     let derecha = 2 * i + 2;
 
-    // Comparar fechas de compra
-    if (
-      izquierda < length &&
-      convertirFecha(array[izquierda].fechaCompra) >
-        convertirFecha(array[mayor].fechaCompra)
-    ) {
-      mayor = izquierda;
+    // Comparar según el criterio de ordenación
+    if (criterio === "fecha") {
+      if (
+        izquierda < length &&
+        convertirFecha(array[izquierda].fechaCompra) >
+          convertirFecha(array[mayor].fechaCompra)
+      ) {
+        mayor = izquierda;
+      }
+      if (
+        derecha < length &&
+        convertirFecha(array[derecha].fechaCompra) >
+          convertirFecha(array[mayor].fechaCompra)
+      ) {
+        mayor = derecha;
+      }
+    } else if (criterio === "monto") {
+      if (
+        izquierda < length &&
+        parseFloat(array[izquierda].monto) > parseFloat(array[mayor].monto)
+      ) {
+        mayor = izquierda;
+      }
+      if (
+        derecha < length &&
+        parseFloat(array[derecha].monto) > parseFloat(array[mayor].monto)
+      ) {
+        mayor = derecha;
+      }
     }
-    if (
-      derecha < length &&
-      convertirFecha(array[derecha].fechaCompra) >
-        convertirFecha(array[mayor].fechaCompra)
-    ) {
-      mayor = derecha;
-    }
+
     if (mayor !== i) {
       [array[i], array[mayor]] = [array[mayor], array[i]];
       heapify(array, length, mayor);
@@ -53,7 +69,7 @@ export const ordenarPorHeapSort = (array) => {
 };
 
 // Quicksort
-export const ordenarPorQuickSort = (array) => {
+export const ordenarPorQuickSort = (array, criterio) => {
   if (array.length <= 1) {
     return array;
   }
@@ -62,20 +78,73 @@ export const ordenarPorQuickSort = (array) => {
   const izquierda = [];
   const derecha = [];
 
-  // Comparar fechas de compra en lugar de montos
+  // Comparar según el criterio de ordenación
   for (let i = 0; i < array.length - 1; i++) {
-    if (
-      convertirFecha(array[i].fechaCompra) < convertirFecha(pivote.fechaCompra)
-    ) {
-      izquierda.push(array[i]);
-    } else {
-      derecha.push(array[i]);
+    if (criterio === "fecha") {
+      if (
+        convertirFecha(array[i].fechaCompra) <
+        convertirFecha(pivote.fechaCompra)
+      ) {
+        izquierda.push(array[i]);
+      } else {
+        derecha.push(array[i]);
+      }
+    } else if (criterio === "monto") {
+      if (parseFloat(array[i].monto) < parseFloat(pivote.monto)) {
+        izquierda.push(array[i]);
+      } else {
+        derecha.push(array[i]);
+      }
     }
   }
 
   return [
-    ...ordenarPorQuickSort(izquierda),
+    ...ordenarPorQuickSort(izquierda, criterio),
     pivote,
-    ...ordenarPorQuickSort(derecha),
+    ...ordenarPorQuickSort(derecha, criterio),
   ];
+};
+
+// Busqueda Binaria
+export const busquedaBinaria = (array, criterio, valor) => {
+  let inicio = 0;
+  let fin = array.length - 1;
+
+  // Asegurarse de que el array esté ordenado antes de realizar la búsqueda binaria
+  array.sort((a, b) => {
+    if (criterio === "fecha") {
+      return convertirFecha(a.fechaCompra) - convertirFecha(b.fechaCompra);
+    } else if (criterio === "monto") {
+      return parseFloat(a.monto) - parseFloat(b.monto);
+    }
+    return 0;
+  });
+
+  // Convertir el valor de búsqueda según el criterio
+  if (criterio === "fecha") {
+    valor = convertirFecha(valor).getTime();
+  } else if (criterio === "monto") {
+    valor = parseFloat(valor);
+  }
+
+  while (inicio <= fin) {
+    const medio = Math.floor((inicio + fin) / 2);
+    let valorMedio;
+
+    if (criterio === "fecha") {
+      valorMedio = convertirFecha(array[medio].fechaCompra).getTime();
+    } else if (criterio === "monto") {
+      valorMedio = parseFloat(array[medio].monto);
+    }
+
+    if (valorMedio === valor) {
+      return medio; // Encontrado
+    } else if (valorMedio < valor) {
+      inicio = medio + 1;
+    } else {
+      fin = medio - 1;
+    }
+  }
+
+  return -1; // No encontrado
 };

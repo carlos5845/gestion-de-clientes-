@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import "../styles/FormularioCliente.css";
 
 // Función para convertir la fecha "YYYY-MM-DD" a "DD/MM/YYYY"
 const convertirFecha = (fecha) => {
@@ -16,7 +17,11 @@ const FormularioCliente = ({ agregarCliente }) => {
     e.preventDefault();
     if (nombre && fecha && monto) {
       const fechaFormateada = convertirFecha(fecha); // Convertir fecha a "DD/MM/YYYY"
-      agregarCliente({ nombre, fechaCompra: fechaFormateada, monto: parseFloat(monto) });
+      agregarCliente({
+        nombre,
+        fechaCompra: fechaFormateada,
+        monto: parseFloat(monto),
+      });
       setNombre("");
       setFecha("");
       setMonto("");
@@ -24,25 +29,30 @@ const FormularioCliente = ({ agregarCliente }) => {
   };
 
   return (
-    <form onSubmit={manejarEnvio}>
+    <form className="formulario-cliente" onSubmit={manejarEnvio}>
       <input
+        className="input-cliente"
         type="text"
         placeholder="Nombre"
         value={nombre}
         onChange={(e) => setNombre(e.target.value)}
       />
       <input
+        className="input-cliente"
         type="date"
         value={fecha}
         onChange={(e) => setFecha(e.target.value)}
       />
       <input
+        className="input-cliente"
         type="number"
         placeholder="Monto de compra"
         value={monto}
         onChange={(e) => setMonto(e.target.value)}
       />
-      <button type="submit">Agregar</button>
+      <button className="boton-cliente" type="submit">
+        Agregar
+      </button>
     </form>
   );
 };
