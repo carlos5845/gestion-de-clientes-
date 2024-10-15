@@ -7,7 +7,8 @@ import {
   busquedaBinaria, // Importar la función de búsqueda binaria
 } from "./components/implementacion-algoritmos";
 import CargarJson from "./components/CargarJson";
-import GraficoEstadisticas from "./components/GraficoEstadisticas"; // Componente de gráficos
+import GraficoEstadisticas from "./components/GraficoEstadisticas";
+import Aleatorio from "./components/aleatorio";
 import "./App.css";
 function App() {
   const [clientes, setClientes] = useState([]);
@@ -55,7 +56,11 @@ function App() {
     setClientes(desordenado);
     setTiempos([0, 0]); // Resetear los tiempos ya que no estamos ejecutando un algoritmo aquí
   };
-
+  const manejarDesordenarAleatorio = () => {
+    const aleatorio = [...clientes].sort(() => Math.random() - 0.5); // Algoritmo de mezcla aleatoria
+    setClientes(aleatorio);
+    setTiempos([0, 0]); // Resetear tiempos
+  };
   // Función para manejar la búsqueda binaria
   const manejarBusquedaBinaria = () => {
     const resultado = busquedaBinaria(clientes, criterioOrden, valorBusqueda);
@@ -64,67 +69,82 @@ function App() {
 
   return (
     <div className="app-container">
-      <h1>Gestión de Clientes</h1>
-      <FormularioCliente agregarCliente={agregarCliente} />
-      {/* Selector para escoger el criterio de orden */}
-      <div className="ordenar-container">
-        <label htmlFor="criterio">Ordenar por: </label>
-        <select
-          id="criterio"
-          value={criterioOrden}
-          onChange={(e) => setCriterioOrden(e.target.value)}
-        >
-          <option value="fecha">Fecha de compra</option>
-          <option value="monto">Monto de compra</option>
-        </select>
-      </div>
-      <button className="boton-ordenar" onClick={manejarOrdenarHeapSort}>
-        Ordenar por Heapsort
-      </button>
-      <button className="boton-ordenar" onClick={manejarOrdenarQuickSort}>
-        Ordenar por Quicksort
-      </button>
-      {/* Botón para desordenar los clientes */}
-      <button className="boton-desordenar" onClick={desordenarClientes}>
-        Desordenar (Peor Caso)
-      </button>
-      {/* Sección para búsqueda binaria */}
-      <div className="busqueda-container">
-        <div className="busqueda-container-interno">
-          <label htmlFor="criterioBusqueda">Buscar por: </label>
-          <select
-            id="criterioBusqueda"
-            value={criterioOrden}
-            onChange={(e) => setCriterioOrden(e.target.value)}
-          >
-            <option value="fecha">Fecha de compra</option>
-            <option value="monto">Monto de compra</option>
-          </select>
-          <input
-            type="text"
-            placeholder={`Buscar por ${criterioOrden}`}
-            value={valorBusqueda}
-            onChange={(e) => setValorBusqueda(e.target.value)}
-          />
-          <button className="boton-buscar" onClick={manejarBusquedaBinaria}>
-            Buscar
-          </button>
+      <h1 className="title">Gestión de Clientes</h1>
+      <div className="grande">
+        <div className="addd">
+          <FormularioCliente agregarCliente={agregarCliente} />
+          {/* Selector para escoger el criterio de orden */}
+          <CargarJson setClientes={setClientes} />
         </div>
-        <div className="resultado-busqueda">
-          {resultadoBusqueda !== null && (
-            <p>
-              {resultadoBusqueda === -1
-                ? "No encontrado"
-                : `Encontrado en la posición ${resultadoBusqueda + 1}`}
-            </p>
-          )}
+        <div className="papa">
+          <div className="ordenar-container">
+            <label htmlFor="criterio">Ordenar por: </label>
+            <select
+              id="criterio"
+              value={criterioOrden}
+              onChange={(e) => setCriterioOrden(e.target.value)}
+            >
+              <option value="fecha">Fecha de compra</option>
+              <option value="monto">Monto de compra</option>
+            </select>
+          </div>
+          <div className="botones-main">
+            <button className="boton-ordenar" onClick={manejarOrdenarHeapSort}>
+              Ordenar por Heapsort
+            </button>
+            <button className="boton-ordenar" onClick={manejarOrdenarQuickSort}>
+              Ordenar por Quicksort
+            </button>
+            {/* Botón para desordenar los clientes */}
+            <button className="boton-desordenar" onClick={desordenarClientes}>
+              Desordenar (Peor Caso)
+            </button>
+            <Aleatorio
+              clientes={clientes}
+              setClientes={manejarDesordenarAleatorio}
+            />
+          </div>
+          {/* Sección para búsqueda binaria */}
+          <div className="busqueda-container">
+            <div className="busqueda-container-interno">
+              <label htmlFor="criterioBusqueda">Buscar por: </label>
+              <select
+                id="criterioBusqueda"
+                value={criterioOrden}
+                onChange={(e) => setCriterioOrden(e.target.value)}
+              >
+                <option value="fecha">Fecha de compra</option>
+                <option value="monto">Monto de compra</option>
+              </select>
+              <input
+                type="text"
+                placeholder={`Buscar por ${criterioOrden}`}
+                value={valorBusqueda}
+                onChange={(e) => setValorBusqueda(e.target.value)}
+              />
+              <button className="boton-buscar" onClick={manejarBusquedaBinaria}>
+                Buscar
+              </button>
+            </div>
+            <div className="resultado-busqueda">
+              {resultadoBusqueda !== null && (
+                <p>
+                  {resultadoBusqueda === -1
+                    ? "No encontrado"
+                    : `Encontrado en la posición ${resultadoBusqueda + 1}`}
+                </p>
+              )}
+            </div>
+          </div>
         </div>
       </div>
-      <CargarJson setClientes={setClientes} />
-      <TablaClientes clientes={clientes} />
-      {/* Aquí se renderiza el gráfico de estadísticas */}
-      <h2>Estadísticas de Tiempos de Ejecución</h2>
-      <GraficoEstadisticas tiempos={tiempos} />
+      <div className="lista">
+        <TablaClientes clientes={clientes} />
+        <div className="estadistica">
+          <h2>Estadísticas de Tiempos de Ejecución</h2>
+          <GraficoEstadisticas tiempos={tiempos} />
+        </div>
+      </div>
     </div>
   );
 }

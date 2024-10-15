@@ -5,7 +5,7 @@ const TablaClientes = ({ clientes }) => {
     <table className="tabla-clientes">
       <thead>
         <tr>
-          <th>ID</th> {/* Nueva columna para mostrar el índice o posición */}
+          <th>ID</th>
           <th>Nombre</th>
           <th>Fecha de compra</th>
           <th>Monto de compra</th>
@@ -14,11 +14,9 @@ const TablaClientes = ({ clientes }) => {
       <tbody>
         {clientes.map((cliente, indice) => (
           <tr key={indice}>
-            <td>{indice + 1}</td>{" "}
-            {/* Mostrar el índice + 1 (para que empiece desde 1) */}
-            <td>{cliente.nombre}</td>
+            <td>{indice + 1}</td> <td>{cliente.nombre}</td>
             <td>{cliente.fechaCompra}</td>
-            <td>{cliente.monto}</td>
+            <td>S/ {cliente.monto}</td>
           </tr>
         ))}
       </tbody>

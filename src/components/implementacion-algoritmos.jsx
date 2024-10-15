@@ -6,20 +6,11 @@ const convertirFecha = (fechaStr) => {
 
 // Heapsort
 export const ordenarPorHeapSort = (array, criterio) => {
-  const construirHeap = (array) => {
-    let i = Math.floor(array.length / 2 - 1);
-    while (i >= 0) {
-      heapify(array, array.length, i);
-      i--;
-    }
-  };
-
   const heapify = (array, length, i) => {
     let mayor = i;
     let izquierda = 2 * i + 1;
     let derecha = 2 * i + 2;
 
-    // Comparar según el criterio de ordenación
     if (criterio === "fecha") {
       if (
         izquierda < length &&
@@ -53,6 +44,14 @@ export const ordenarPorHeapSort = (array, criterio) => {
     if (mayor !== i) {
       [array[i], array[mayor]] = [array[mayor], array[i]];
       heapify(array, length, mayor);
+    }
+  };
+
+  const construirHeap = (array) => {
+    let i = Math.floor(array.length / 2 - 1);
+    while (i >= 0) {
+      heapify(array, array.length, i);
+      i--; 
     }
   };
 
